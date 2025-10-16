@@ -99,3 +99,23 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
 - macOS/Linux (shell profile): add to `~/.zshrc` or `~/.bashrc`: `export NOTION_API_KEY=secret_...`
 - If Gemini CLI supports user variables in its extension config, map your user variable into the extension env so the process sees `NOTION_API_KEY` (or one of the fallbacks) at runtime.
 
+
+## Getting Started
+
+- Clone the repo:
+  - `git clone https://github.com/gitremko/Gemini_cli_notion_extention`
+  - `cd Gemini_cli_notion_extention`
+- Configure secrets:
+  - Copy `.env.example` to `.env` and set `NOTION_API_KEY`
+- Install and build:
+  - `npm install`
+  - `npm run build`
+- Run as MCP (stdio):
+  - `node dist/server.js`
+- Or run the bundled CLI:
+  - `node dist/cli.js`
+- Configure your MCP-capable client (e.g., Gemini CLI, Claude Code) to use:
+  - command: `notion-mcp` (after `npm i -g` in this folder) or `node dist/cli.js`
+  - env: `{ "NOTION_API_KEY": "..." }`
+
+See the full tool list and examples below. For changes, check CHANGELOG.md.
