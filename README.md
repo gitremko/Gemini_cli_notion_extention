@@ -127,3 +127,7 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
 
 See the full tool list and examples below. For changes, check CHANGELOG.md.
 
+
+## License
+
+MIT License — see LICENSE.
