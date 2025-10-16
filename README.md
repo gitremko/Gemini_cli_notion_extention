@@ -1,5 +1,7 @@
 # Gemini_cli_notion_extention
 
+[![CI](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml)
+
 Extension for Notion in Gemini CLI via MCP.
 
 ## Notion MCP Server
