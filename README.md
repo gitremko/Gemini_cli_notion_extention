@@ -14,7 +14,13 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
   - Share the relevant pages/databases with your integration in Notion
 
 - Install
-  - Copy `.env.example` to `.env` and set `NOTION_API_KEY`.
+  - Prefer setting your Notion key as an environment variable:
+    - Windows (PowerShell, user scope): `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
+    - Windows (CMD, user scope): `setx NOTION_API_KEY "secret_..."`
+    - macOS/Linux (current shell): `export NOTION_API_KEY=secret_...`
+    - macOS/Linux (persist): add `export NOTION_API_KEY=secret_...` to `~/.zshrc` or `~/.bashrc`
+    - Alternate names also supported: `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`
+  - Optional (local dev): you may still use a `.env` file by copying `.env.example` to `.env`.
   - Run `npm install`.
   - For development: `npm run dev` (runs via tsx on stdio)
   - Build + run: `npm run build` then `npm start`.
@@ -91,13 +97,16 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
 
 ## User variables / secrets
 
-- The server reads your key from any of these env vars: `NOTION_API_KEY`, `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`.
-- Windows (user-scoped env var):
+- Preferred: set `NOTION_API_KEY` as an environment variable so secrets do not live in files.
+- Also supported env var names: `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`.
+- Windows (user-scoped):
   - PowerShell: `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
   - CMD: `setx NOTION_API_KEY "secret_..."`
   - Open a new terminal to pick up changes.
-- macOS/Linux (shell profile): add to `~/.zshrc` or `~/.bashrc`: `export NOTION_API_KEY=secret_...`
-- If Gemini CLI supports user variables in its extension config, map your user variable into the extension env so the process sees `NOTION_API_KEY` (or one of the fallbacks) at runtime.
+- macOS/Linux:
+  - Current shell: `export NOTION_API_KEY=secret_...`
+  - Persist: add to `~/.zshrc` or `~/.bashrc`.
+- Optional fallback: for local development you can use a `.env` file (values are read into the process the same way).
 
 
 ## Getting Started
@@ -105,8 +114,7 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
 - Clone the repo:
   - `git clone https://github.com/gitremko/Gemini_cli_notion_extention`
   - `cd Gemini_cli_notion_extention`
-- Configure secrets:
-  - Copy `.env.example` to `.env` and set `NOTION_API_KEY`
+- Configure secrets (preferred): set `NOTION_API_KEY` as an environment variable for your OS (see above). Optionally, use `.env` for local dev.
 - Install and build:
   - `npm install`
   - `npm run build`

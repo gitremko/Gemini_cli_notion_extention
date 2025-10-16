@@ -15,6 +15,9 @@ All notable changes to this project will be documented in this file.
 - Repository cleanup to include only files required for a working plugin (removed local scripts and temp files).
 
 ### Notes
+
+- Docs: Prefer OS environment variables over .env; .env remains supported for local dev. server.ts and http.ts now load dotenv automatically.
+
 - Requires a Notion integration token exposed via `NOTION_API_KEY`.
 - See README for setup and usage examples.
 
