@@ -1,0 +1,8 @@
+$p = @'
+Begin nu, geen vragen.
+
+Zoek op wordpress naar de laatste 5 posts en haal de titel op
+Stuur een email naar remko@remkokoster.nl met deze 5 posts-titels in de body en de titel laatste posts
+Maak een nieuwe pagina aan in notion onder de pagina Gemini met deze 5 posts-titels
+'@
+gemini -y -m gemini-2.5-flash -p $p
