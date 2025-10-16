@@ -1,8 +1,12 @@
-**Notion MCP Server**
+# Gemini_cli_notion_extention
+
+Extension for Notion in Gemini CLI via MCP.
+
+## Notion MCP Server
 
 Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI if it supports MCP, Claude Code, VS Code Copilot MCP, Cursor).
 
-Setup
+## Setup
 
 - Requirements
   - Node.js 18+
@@ -15,7 +19,7 @@ Setup
   - For development: `npm run dev` (runs via tsx on stdio)
   - Build + run: `npm run build` then `npm start`.
 
-Tools
+## Tools
 
 - `notion_search`
   - Args: `query` (string, required), `filter` ({ property: 'object', value: 'page'|'database' } optional), `page_size` (1-100)
@@ -37,7 +41,7 @@ Tools
   - Args: `database_id` (string), `title` (string), `title_property` (default "Name"), `properties` (object, optional)
   - Creates a new page in a database
 
-Running with MCP Clients
+## Running with MCP Clients
 
 - Stdio transport (generic MCP clients)
   - Command: `notion-mcp` (after `npm i -g` or `npm run build && node dist/cli.js`)
@@ -53,7 +57,7 @@ Running with MCP Clients
   - Endpoint: `http://localhost:3030/mcp`
   - Some clients (Claude Code, VS Code, Cursor) support HTTP MCP.
 
-Gemini CLI Extension
+## Gemini CLI Extension
 
 - Install globally so others can run the same command:
   - `npm i -g` in this folder (or publish to npm and `npm i -g notion-mcp-server`)
@@ -63,7 +67,7 @@ Gemini CLI Extension
   - env: `{ "NOTION_API_KEY": "..." }`
   - If Gemini CLI supports an extensions manifest, point an entry to the above command/env. Exact keys depend on Gemini CLI; see their extensions docs.
 
-Gemini CLI Integration
+## Gemini CLI Integration
 
 - If your Gemini CLI supports MCP servers via stdio, add a server entry pointing to this command and pass `NOTION_API_KEY` in env.
 - If it uses an `mcpServers` config (JSON), the entry typically looks like:
@@ -79,18 +83,19 @@ Gemini CLI Integration
   }
 - Concrete paths and config keys can differ per client; consult your Gemini CLI docs for where to place this block.
 
-Notes
+## Notes
 
 - Ensure your Notion integration has access to the pages/databases you want to use (share them in Notion).
 - Title property name can vary across databases; default is `Name`, override with `title_property` when needed.
 - For testing and inspection, you can also use the MCP Inspector: `npx @modelcontextprotocol/inspector` and connect to the running server (stdio or HTTP as configured).
 
-User variables / secrets
+## User variables / secrets
 
 - The server reads your key from any of these env vars: `NOTION_API_KEY`, `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`.
-- Windows (user‑scoped env var):
+- Windows (user-scoped env var):
   - PowerShell: `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
   - CMD: `setx NOTION_API_KEY "secret_..."`
   - Open a new terminal to pick up changes.
 - macOS/Linux (shell profile): add to `~/.zshrc` or `~/.bashrc`: `export NOTION_API_KEY=secret_...`
 - If Gemini CLI supports user variables in its extension config, map your user variable into the extension env so the process sees `NOTION_API_KEY` (or one of the fallbacks) at runtime.
+
