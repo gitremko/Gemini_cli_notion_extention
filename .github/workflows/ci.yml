@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version: [18.x, 20.x, 22.x]
+        node-version: [20.x, 22.x]
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,4 +28,3 @@ jobs:
 
       - name: Verify build artifacts exist
         run: node -e "require('fs').accessSync('dist/server.js');require('fs').accessSync('dist/extension.cjs');console.log('Artifacts OK')"
-
