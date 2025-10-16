@@ -20,11 +20,11 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - name: Install dependencies (no scripts)
+        run: npm ci --ignore-scripts --no-audit --fund=false
 
-      - name: Build
-        run: npm run build
+      - name: Build (TS compile only)
+        run: npm run build:ci
 
       - name: Verify build artifacts exist
-        run: node -e "require('fs').accessSync('dist/server.js');require('fs').accessSync('dist/extension.cjs');console.log('Artifacts OK')"
+        run: node -e "require('fs').accessSync('dist/server.js');require('fs').accessSync('dist/http.js');require('fs').accessSync('dist/cli.js');console.log('Artifacts OK')"
