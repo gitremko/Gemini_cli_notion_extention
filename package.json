@@ -26,6 +26,7 @@
                             "tsx":  "^4.19.1",
                             "typescript":  "^5.6.3",
                             "@types/express":  "^4.17.21",
-                            "esbuild":  "^0.25.11"
+                            "esbuild":  "^0.25.11",
+                            "@types/node":  "^20.12.12"
                         }
 }
