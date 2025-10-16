@@ -108,7 +108,6 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
   - Persist: add to `~/.zshrc` or `~/.bashrc`.
 - Optional fallback: for local development you can use a `.env` file (values are read into the process the same way).
 
-
 ## Getting Started
 
 - Clone the repo:
@@ -127,3 +126,4 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
   - env: `{ "NOTION_API_KEY": "..." }`
 
 See the full tool list and examples below. For changes, check CHANGELOG.md.
+

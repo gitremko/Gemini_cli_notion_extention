@@ -1,4 +1,10 @@
 # Changelog
+## [0.1.1] - 2025-10-16
+
+### Removed
+- dotenv fallback and .env usage; project now uses OS environment variables only.
+- Deleted .env.example.
+
 
 All notable changes to this project will be documented in this file.
 
@@ -20,4 +26,5 @@ All notable changes to this project will be documented in this file.
 
 - Requires a Notion integration token exposed via `NOTION_API_KEY`.
 - See README for setup and usage examples.
+
 
