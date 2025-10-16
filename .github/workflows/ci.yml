@@ -21,7 +21,7 @@ jobs:
           cache: npm
 
       - name: Install dependencies (no scripts)
-        run: npm ci --ignore-scripts --no-audit --fund=false
+        run: npm install --ignore-scripts --no-audit --fund=false
 
       - name: Build (TS compile only)
         run: npm run build:ci
