@@ -10,7 +10,8 @@
                     "start":  "node dist/server.js",
                     "build":  "tsc -p tsconfig.json \u0026\u0026 npm run bundle",
                     "bundle":  "esbuild src/cli.ts --bundle --platform=node --format=cjs --sourcemap --outfile=dist/extension.cjs",
-                    "lint":  "echo \u0027no linter configured\u0027"
+                    "lint":  "echo \u0027no linter configured\u0027",
+                    "build:ci":  "tsc -p tsconfig.json"
                 },
     "bin":  {
                 "notion-mcp":  "dist/cli.js"
