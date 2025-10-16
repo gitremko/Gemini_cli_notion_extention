@@ -2,7 +2,25 @@
 
 [![CI](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml)
 
-Extension for Notion in Gemini CLI via MCP.
+
+## Installation
+
+- Quick install (recommended)
+  - One-liner: gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention
+  - Prerequisites:
+    - Gemini CLI is installed and working
+    - Node.js 20+ and npm available
+    - Set NOTION_API_KEY in your environment (preferred). Also supported: GEMINI_NOTION_API_KEY, NOTION_TOKEN, NOTION_SECRET.
+  - After install: restart Gemini CLI and run gemini extensions list to confirm it shows 
+otion.
+
+- Local development (link)
+  - git clone https://github.com/gitremko/Gemini_cli_notion_extention && cd Gemini_cli_notion_extention
+  - Set NOTION_API_KEY in your env
+  - 
+pm install && npm run build
+  - gemini extensions link .
+  - Edit code and rebuild to pick up changes
 
 ## Notion MCP Server
 
@@ -108,28 +126,16 @@ Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI i
 - macOS/Linux:
   - Current shell: `export NOTION_API_KEY=secret_...`
   - Persist: add to `~/.zshrc` or `~/.bashrc`.
-- Optional fallback: for local development you can use a `.env` file (values are read into the process the same way).
 
 ## Getting Started
 
-- Clone the repo:
-  - `git clone https://github.com/gitremko/Gemini_cli_notion_extention`
-  - `cd Gemini_cli_notion_extention`
-- Configure secrets (preferred): set `NOTION_API_KEY` as an environment variable for your OS (see above). Optionally, use `.env` for local dev.
-- Install and build:
-  - `npm install`
-  - `npm run build`
-- Run as MCP (stdio):
-  - `node dist/server.js`
-- Or run the bundled CLI:
-  - `node dist/cli.js`
-- Configure your MCP-capable client (e.g., Gemini CLI, Claude Code) to use:
-  - command: `notion-mcp` (after `npm i -g` in this folder) or `node dist/cli.js`
-  - env: `{ "NOTION_API_KEY": "..." }`
+- Easiest: gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention
+- Set NOTION_API_KEY in your environment
+- Restart Gemini CLI and run a Notion command
 
-See the full tool list and examples below. For changes, check CHANGELOG.md.
-
+For local development, see the \"Local development (link)\" section above.
 
 ## License
 
 MIT License — see LICENSE.
+
