@@ -1,4 +1,4 @@
-# Notion MCP for Gemini CLI
+﻿# Notion MCP for Gemini CLI
 
 A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and other MCP clients) search, read, and write Notion content.
 
@@ -26,7 +26,7 @@ A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and othe
 3) Grant access to pages/databases
    - In the integration page, open the "Access" tab and add the pages/databases you want to use
    - Or share specific Notion pages/databases with your integration from Notion
-4) Copy the "Internal Integration Secret" — this is your API key
+4) Copy the "Internal Integration Secret" â€” this is your API key
 
 ## Set API Key
 - Windows (User-scoped, required on Windows)
@@ -50,7 +50,7 @@ Notes
 ## Use in Gemini CLI
 - After install, Gemini CLI discovers the MCP server `notion` automatically.
 - Try a simple tool call (search):
-  - Ask: "search Notion for 'your term'" — the tool used is `notion_search`.
+  - Ask: "search Notion for 'your term'" â€” the tool used is `notion_search`.
 
 ## Local Development (link)
 - `git clone https://github.com/gitremko/Gemini_cli_notion_extention && cd Gemini_cli_notion_extention`
@@ -61,30 +61,30 @@ Notes
 
 ## Available Tools (full)
 
-- `notion_search` — search pages/databases (query, optional filter, page_size)
-- `notion_get_page` — fetch a page object by id
-- `notion_list_blocks` — list child blocks for a page/block
-- `notion_append_paragraph` — append paragraph text
-- `notion_create_page` — create a page in a database (with title property)
-- `notion_create_subpage` — create a subpage under a page
-- `notion_query_database` — query a database (filter, sorts, cursor, page_size)
-- `notion_update_page` — update properties of a page
-- `notion_get_block` — fetch a single block by id
-- `notion_append_blocks` — append one or more blocks under a parent
-- `notion_archive_page` — archive a page
-- `notion_unarchive_page` — restore an archived page
-- `notion_delete_block` — delete (archive) a block
-- `notion_update_block_text` — update rich_text of paragraph/heading
-- `notion_append_heading` — append a heading (1/2/3)
-- `notion_append_todo` — append a to_do (checkbox)
-- `notion_list_databases` — list databases in the workspace
-- `notion_list_pages_in_database` — list pages in a database
-- `notion_append_image_url` — append an image block from an external URL
+- `notion_search` â€” search pages/databases (query, optional filter, page_size)
+- `notion_get_page` â€” fetch a page object by id
+- `notion_list_blocks` â€” list child blocks for a page/block
+- `notion_append_paragraph` â€” append paragraph text
+- `notion_create_page` â€” create a page in a database (with title property)
+- `notion_create_subpage` â€” create a subpage under a page
+- `notion_query_database` â€” query a database (filter, sorts, cursor, page_size)
+- `notion_update_page` â€” update properties of a page
+- `notion_get_block` â€” fetch a single block by id
+- `notion_append_blocks` â€” append one or more blocks under a parent
+- `notion_archive_page` â€” archive a page
+- `notion_unarchive_page` â€” restore an archived page
+- `notion_delete_block` â€” delete (archive) a block
+- `notion_update_block_text` â€” update rich_text of paragraph/heading
+- `notion_append_heading` â€” append a heading (1/2/3)
+- `notion_append_todo` â€” append a to_do (checkbox)
+- `notion_list_databases` â€” list databases in the workspace
+- `notion_list_pages_in_database` â€” list pages in a database
+- `notion_append_image_url` â€” append an image block from an external URL
 
 Prompts
-- `notion_build_filter` — build a database filter skeleton
-- `notion_blocks_snippet` — generate blocks JSON for append
-- `notion_create_page_snippet` — generate properties JSON for page creation
+- `notion_build_filter` â€” build a database filter skeleton
+- `notion_blocks_snippet` â€” generate blocks JSON for append
+- `notion_create_page_snippet` â€” generate properties JSON for page creation
 
 ## Troubleshooting
 - Connection closed (-32000): ensure Node is available on PATH and reinstall the extension.
@@ -100,4 +100,5 @@ Prompts
 
 ## License
 MIT
+
 
