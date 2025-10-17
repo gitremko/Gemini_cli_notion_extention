@@ -69,7 +69,7 @@ export function buildNotionServer(): McpServer {
     'notion_search',
     {
       title: 'Notion Search',
-      description: "Zoek naar Notion pagina's en databases",
+      description: 'Search Notion pages and databases',
       inputSchema: {
         query: z.string().min(1, 'query is verplicht'),
         filter: z
@@ -116,7 +116,7 @@ export function buildNotionServer(): McpServer {
     'notion_get_page',
     {
       title: 'Get Notion Page',
-      description: 'Lees meta/properties van een Notion pagina',
+      description: 'Read a Notion page metadata/properties by ID',
       inputSchema: { page_id: z.string().min(1) }
       // No strict output schema; returns full Notion page object
     },
@@ -135,7 +135,7 @@ export function buildNotionServer(): McpServer {
     'notion_list_blocks',
     {
       title: 'List Notion Blocks',
-      description: 'Haal blokken (content) op van een Notion pagina of block',
+      description: 'List child blocks (content) of a page or block',
       inputSchema: {
         block_id: z.string().min(1),
         page_size: z.number().int().min(1).max(100).optional()
@@ -157,7 +157,7 @@ export function buildNotionServer(): McpServer {
     'notion_append_paragraph',
     {
       title: 'Append Paragraph',
-      description: 'Voeg een paragraaf tekst toe aan een pagina of block',
+      description: 'Append a paragraph block with text to a page or block',
       inputSchema: {
         parent_block_id: z.string().min(1),
         text: z.string().min(1)
@@ -191,7 +191,7 @@ export function buildNotionServer(): McpServer {
     {
       title: 'Create Page In Database',
       description:
-        'Maak een pagina aan in een Notion database. Geeft de property-naam voor de titel door (default: "Name").',
+        'Create a page in a Notion database. Provide the title property name (default: "Name").',
       inputSchema: {
         database_id: z.string().min(1),
         title: z.string().min(1),
@@ -230,7 +230,7 @@ export function buildNotionServer(): McpServer {
     {
       title: 'Create Subpage',
       description:
-        'Maak een subpagina aan onder een bestaande Notion pagina (parent page_id).',
+        'Create a subpage under an existing Notion page (parent page_id).',
       inputSchema: {
         parent_page_id: z.string().min(1),
         title: z.string().min(1),
@@ -270,7 +270,7 @@ export function buildNotionServer(): McpServer {
     'notion_query_database',
     {
       title: 'Query Database',
-      description: 'Voer een Notion database query uit met filter/sorts/start_cursor/page_size',
+      description: 'Query a Notion database with filter/sorts/start_cursor/page_size',
       inputSchema: {
         database_id: z.string().min(1),
         filter: z.record(z.any()).optional(),
@@ -300,7 +300,7 @@ export function buildNotionServer(): McpServer {
     'notion_update_page',
     {
       title: 'Update Page Properties',
-      description: 'Werk properties bij van een bestaande Notion pagina',
+      description: 'Update properties of an existing Notion page',
       inputSchema: {
         page_id: z.string().min(1),
         properties: z.record(z.any())
@@ -324,7 +324,7 @@ export function buildNotionServer(): McpServer {
     'notion_get_block',
     {
       title: 'Get Block',
-      description: 'Lees één Notion block op basis van block_id',
+      description: 'Read a single Notion block by block_id',
       inputSchema: { block_id: z.string().min(1) }
     },
     async ({ block_id }) => {
@@ -342,7 +342,7 @@ export function buildNotionServer(): McpServer {
     'notion_append_blocks',
     {
       title: 'Append Blocks',
-      description: 'Voeg één of meer blokken toe onder een parent block/pagina',
+      description: 'Append one or more blocks under a parent block/page',
       inputSchema: {
         parent_block_id: z.string().min(1),
         blocks: z.array(z.record(z.any())).min(1)
@@ -368,7 +368,7 @@ export function buildNotionServer(): McpServer {
     'notion_archive_page',
     {
       title: 'Archive Page',
-      description: 'Archiveer een bestaande Notion pagina',
+      description: 'Archive an existing Notion page',
       inputSchema: { page_id: z.string().min(1) }
     },
     async ({ page_id }) => {
@@ -382,7 +382,7 @@ export function buildNotionServer(): McpServer {
     'notion_unarchive_page',
     {
       title: 'Unarchive Page',
-      description: 'Zet een gearchiveerde pagina terug naar actief',
+      description: 'Restore an archived Notion page to active',
       inputSchema: { page_id: z.string().min(1) }
     },
     async ({ page_id }) => {
@@ -397,7 +397,7 @@ export function buildNotionServer(): McpServer {
     'notion_delete_block',
     {
       title: 'Delete Block',
-      description: 'Verwijder een block (archiveer)',
+      description: 'Delete (archive) a block',
       inputSchema: { block_id: z.string().min(1) }
     },
     async ({ block_id }) => {
@@ -412,7 +412,7 @@ export function buildNotionServer(): McpServer {
     'notion_update_block_text',
     {
       title: 'Update Block Text',
-      description: 'Werk de rich_text van paragraph of heading (1/2/3) bij',
+      description: 'Update rich_text of a paragraph or heading (1/2/3)',
       inputSchema: {
         block_id: z.string().min(1),
         type: z.enum(['paragraph', 'heading_1', 'heading_2', 'heading_3']),
@@ -432,7 +432,7 @@ export function buildNotionServer(): McpServer {
     'notion_append_heading',
     {
       title: 'Append Heading',
-      description: 'Voeg een heading toe (1/2/3)',
+      description: 'Append a heading block (1/2/3)',
       inputSchema: {
         parent_block_id: z.string().min(1),
         level: z.enum(['heading_1', 'heading_2', 'heading_3']).default('heading_2'),
@@ -455,7 +455,7 @@ export function buildNotionServer(): McpServer {
     'notion_append_todo',
     {
       title: 'Append To-do',
-      description: 'Voeg een to_do item toe (checkbox)',
+      description: 'Append a to_do (checkbox) block',
       inputSchema: {
         parent_block_id: z.string().min(1),
         text: z.string().min(1),
@@ -479,7 +479,7 @@ export function buildNotionServer(): McpServer {
     'notion_list_databases',
     {
       title: 'List Databases',
-      description: 'Zoek naar databases in de workspace',
+      description: 'List databases in the workspace',
       inputSchema: { query: z.string().optional(), page_size: z.number().int().min(1).max(100).optional() }
     },
     async ({ query, page_size }) => {
@@ -494,7 +494,7 @@ export function buildNotionServer(): McpServer {
     'notion_list_pages_in_database',
     {
       title: 'List Pages In Database',
-      description: 'Haal pagina\'s op uit een database (zonder filter)',
+      description: 'List pages from a database (no filter)',
       inputSchema: { database_id: z.string().min(1), page_size: z.number().int().min(1).max(100).optional() }
     },
     async ({ database_id, page_size }) => {
@@ -510,7 +510,7 @@ export function buildNotionServer(): McpServer {
     'notion_append_image_url',
     {
       title: 'Append Image (URL)',
-      description: 'Voeg een image block toe met external URL',
+      description: 'Append an image block with an external URL',
       inputSchema: { parent_block_id: z.string().min(1), url: z.string().url() }
     },
     async ({ parent_block_id, url }) => {
@@ -530,7 +530,7 @@ export function buildNotionServer(): McpServer {
     'notion_build_filter',
     {
       title: 'Build Database Filter',
-      description: 'Stel eenvoudig een filter op voor database queries',
+      description: 'Quickly draft a filter for database queries',
       argsSchema: {
         property: completable(z.string(), (v) => ['Name','Title','Status','Assignee','Tags','Priority','Done'].filter(x => x.toLowerCase().startsWith((v||'').toLowerCase()))),
         operator: completable(z.string(), (v) => ['equals','does_not_equal','contains','does_not_contain','starts_with','ends_with','greater_than','less_than','on_or_after','on_or_before','is_empty','is_not_empty'].filter(x => x.startsWith(v||''))),
@@ -554,7 +554,7 @@ export function buildNotionServer(): McpServer {
     'notion_blocks_snippet',
     {
       title: 'Blocks Snippet',
-      description: 'Genereer blocks JSON voor append',
+      description: 'Generate blocks JSON for append',
       argsSchema: {
         type: completable(z.string(), (v) => ['paragraph','heading_1','heading_2','to_do','quote','bulleted_list_item'].filter(x => x.startsWith(v||''))),
         text: z.string()
@@ -577,7 +577,7 @@ export function buildNotionServer(): McpServer {
     'notion_create_page_snippet',
     {
       title: 'Create Page Snippet',
-      description: 'Genereer properties JSON voor pagina creatie',
+      description: 'Generate properties JSON for page creation',
       argsSchema: { title_property: z.string(), title: z.string() }
     },
     ({ title_property, title }) => ({
