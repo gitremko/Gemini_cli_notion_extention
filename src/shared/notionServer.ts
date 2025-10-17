@@ -3,24 +3,32 @@ import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { completable } from '@modelcontextprotocol/sdk/server/completable.js';
 
-function getNotionApiKey(): string | undefined {
-  return (
-    process.env.NOTION_API_KEY ||
-    process.env.GEMINI_NOTION_API_KEY ||
-    process.env.GEMINI_API_KEY ||
-    process.env.NOTION_TOKEN ||
-    process.env.NOTION_SECRET
-  );
+function resolveNotionApiKey(): { key?: string; source?: string } {
+  const candidates: Array<{ value?: string; source: string }> = [
+    { value: process.env.NOTION_API_KEY, source: 'NOTION_API_KEY' },
+    { value: process.env.GEMINI_NOTION_API_KEY, source: 'GEMINI_NOTION_API_KEY' },
+    // Intentionally NOT using GEMINI_API_KEY to avoid conflicts
+    { value: process.env.NOTION_TOKEN, source: 'NOTION_TOKEN' },
+    { value: process.env.NOTION_SECRET, source: 'NOTION_SECRET' }
+  ];
+
+  for (const c of candidates) {
+    if (typeof c.value === 'string' && c.value.trim().length > 0) {
+      return { key: c.value.trim(), source: c.source };
+    }
+  }
+  return {};
 }
 
 export function buildNotionServer(): McpServer {
-  const NOTION_API_KEY = getNotionApiKey();
+  const { key: NOTION_API_KEY, source } = resolveNotionApiKey();
   if (!NOTION_API_KEY) {
     console.error(
       'No Notion API key found. Set one of: NOTION_API_KEY, GEMINI_NOTION_API_KEY, NOTION_TOKEN, NOTION_SECRET.'
     );
     process.exit(1);
   }
+  console.error(`Using Notion API key from env: ${source}`);
 
   const notion = new NotionClient({ auth: NOTION_API_KEY });
 
