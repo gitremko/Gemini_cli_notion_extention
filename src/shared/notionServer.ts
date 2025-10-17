@@ -61,7 +61,7 @@ export function buildNotionServer(): McpServer {
 
   const server = new McpServer({
     name: 'notion-mcp-server',
-    version: '0.1.0'
+    version: '0.1.8'
   });
 
   // Tool: search Notion (pages and databases)
