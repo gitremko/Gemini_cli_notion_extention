@@ -1,4 +1,6 @@
-# Notion MCP for Gemini CLI
+ï»¿# Notion MCP for Gemini CLI
+
+[![CI](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml)
 
 A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and other MCP clients) search, read, and write Notion content.
 
@@ -11,20 +13,20 @@ A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and othe
 - Install from GitHub:
   - `gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention`
 - Create a Notion Internal Integration and grant access (see below)
-- Set your API key (see “Set API Key”)
+- Set your API key (see ï¿½Set API Keyï¿½)
 - Restart Gemini CLI, then run: `gemini extensions list` ? should show `notion`
 
 ## Create the Notion Integration (required)
 1) Go to https://www.notion.so/profile/integrations
-2) Click “New integration”
-   - Workspace: choose the workspace you’ll use
+2) Click ï¿½New integrationï¿½
+   - Workspace: choose the workspace youï¿½ll use
    - Type: `Internal`
    - Capabilities: enable at minimum "Read content". To write, also enable "Insert content" and "Update content"
    - Save
 3) Grant access to pages/databases
-   - On the integration page, open the “Access” tab and add the pages/databases you want to use
+   - On the integration page, open the ï¿½Accessï¿½ tab and add the pages/databases you want to use
    - Or share specific Notion pages/databases with your integration from Notion
-4) Copy the “Internal Integration Secret” — this is your API key
+4) Copy the ï¿½Internal Integration Secretï¿½ ï¿½ this is your API key
 
 ## Set API Key
 - Windows (User-scoped, required on Windows)
@@ -48,7 +50,7 @@ Notes
 ## Use in Gemini CLI
 - After install, Gemini CLI discovers the MCP server `notion` automatically
 - Try a simple tool call (e.g., search):
-  - Ask Gemini to “search Notion for ‘<your term>’” — the tool used is `notion_search`
+  - Ask Gemini to ï¿½search Notion for ï¿½<your term>ï¿½ï¿½ ï¿½ the tool used is `notion_search`
 
 ## Local Development (link)
 - `git clone https://github.com/gitremko/Gemini_cli_notion_extention && cd Gemini_cli_notion_extention`
@@ -58,11 +60,11 @@ Notes
 - Unlink later: `gemini extensions unlink notion`
 
 ## Available Tools (high-level)
-- `notion_search` — search pages/databases (query, optional filter, page_size)
-- `notion_get_page` — fetch a page object by id
-- `notion_list_blocks` — list child blocks for a page/block
-- `notion_append_paragraph` — append paragraph text
-- `notion_create_page` — create a page in a database (with title property)
+- `notion_search` ï¿½ search pages/databases (query, optional filter, page_size)
+- `notion_get_page` ï¿½ fetch a page object by id
+- `notion_list_blocks` ï¿½ list child blocks for a page/block
+- `notion_append_paragraph` ï¿½ append paragraph text
+- `notion_create_page` ï¿½ create a page in a database (with title property)
 - Additional helpers: headings, to-dos, database listing, snippets
 
 ## Troubleshooting
@@ -83,4 +85,5 @@ Notes
 
 ## License
 MIT
+
 
