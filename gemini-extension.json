@@ -1,19 +1,15 @@
 {
-  "name": "notion",
-  "displayName": "Notion MCP",
-  "version": "0.1.3",
-  "description": "Notion integration via MCP (search/read/write pages).",
-  "mcpServers": {
-    "notion": {
-      "transport": "stdio",
-      "command": "node",
-      "args": ["${extensionPath}${/}dist${/}server.js"],
-      "env": {
-        "NOTION_API_KEY": "${env:NOTION_API_KEY}",
-        "GEMINI_NOTION_API_KEY": "${env:GEMINI_NOTION_API_KEY}",
-        "NOTION_TOKEN": "${env:NOTION_TOKEN}",
-        "NOTION_SECRET": "${env:NOTION_SECRET}"
-      }
-    }
-  }
+    "name":  "notion",
+    "displayName":  "Notion MCP",
+    "version":  "0.1.4",
+    "description":  "Notion integration via MCP (search/read/write pages).",
+    "mcpServers":  {
+                       "notion":  {
+                                      "transport":  "stdio",
+                                      "command":  "node",
+                                      "args":  [
+                                                   "${extensionPath}${/}dist${/}server.js"
+                                               ]
+                                  }
+                   }
 }
