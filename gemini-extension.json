@@ -1,14 +1,14 @@
 {
     "name":  "notion",
     "displayName":  "Notion MCP",
-    "version":  "0.1.7",
+    "version":  "0.1.8",
     "description":  "Notion integration via MCP (search/read/write pages).",
     "mcpServers":  {
                        "notion":  {
                                       "transport":  "stdio",
-                                      "command":  "${extensionPath}${/}bin${/}notion-mcp.cmd",
+                                      "command":  "node",
                                       "args":  [
-
+                                                   "${extensionPath}${/}dist${/}extension.cjs"
                                                ]
                                   }
                    }

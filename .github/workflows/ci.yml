@@ -23,8 +23,8 @@ jobs:
       - name: Install dependencies (no scripts)
         run: npm install --ignore-scripts --no-audit --fund=false
 
-      - name: Build (TS compile only)
-        run: npm run build:ci
+      - name: Build (compile + bundle)
+        run: npm run build
 
       - name: Verify build artifacts exist
-        run: node -e "require('fs').accessSync('dist/server.js');require('fs').accessSync('dist/http.js');require('fs').accessSync('dist/cli.js');console.log('Artifacts OK')"
+        run: node -e "['dist/server.js','dist/http.js','dist/cli.js','dist/extension.cjs'].forEach(f=>require('fs').accessSync(f));console.log('Artifacts OK')"
