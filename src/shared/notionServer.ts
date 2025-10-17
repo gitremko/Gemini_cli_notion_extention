@@ -2,16 +2,43 @@ import { Client as NotionClient } from '@notionhq/client';
 import { McpServer } from '@modelcontextprotocol/sdk/server/mcp.js';
 import { z } from 'zod';
 import { completable } from '@modelcontextprotocol/sdk/server/completable.js';
+import { execSync } from 'node:child_process';
+
+function readWindowsUserEnv(name: string): string | undefined {
+  try {
+    const raw = execSync(`reg query HKCU\\Environment /v ${name}`, { encoding: 'utf8' });
+    // Example line: "    NOTION_API_KEY    REG_SZ    secret_..."
+    const match = raw.match(new RegExp(`${name}\\s+REG_\\w+\\s+(.+)`));
+    return match?.[1]?.trim();
+  } catch {
+    return undefined;
+  }
+}
 
 function resolveNotionApiKey(): { key?: string; source?: string } {
+  if (process.platform === 'win32') {
+    // Only read from Windows User-scoped environment (HKCU\Environment)
+    const candidates = [
+      { value: readWindowsUserEnv('NOTION_API_KEY'), source: 'HKCU:NOTION_API_KEY' },
+      { value: readWindowsUserEnv('GEMINI_NOTION_API_KEY'), source: 'HKCU:GEMINI_NOTION_API_KEY' },
+      { value: readWindowsUserEnv('NOTION_TOKEN'), source: 'HKCU:NOTION_TOKEN' },
+      { value: readWindowsUserEnv('NOTION_SECRET'), source: 'HKCU:NOTION_SECRET' }
+    ];
+    for (const c of candidates) {
+      if (typeof c.value === 'string' && c.value.trim().length > 0) {
+        return { key: c.value.trim(), source: c.source };
+      }
+    }
+    return {};
+  }
+
+  // Non-Windows: fall back to process env
   const candidates: Array<{ value?: string; source: string }> = [
     { value: process.env.NOTION_API_KEY, source: 'NOTION_API_KEY' },
     { value: process.env.GEMINI_NOTION_API_KEY, source: 'GEMINI_NOTION_API_KEY' },
-    // Intentionally NOT using GEMINI_API_KEY to avoid conflicts
     { value: process.env.NOTION_TOKEN, source: 'NOTION_TOKEN' },
     { value: process.env.NOTION_SECRET, source: 'NOTION_SECRET' }
   ];
-
   for (const c of candidates) {
     if (typeof c.value === 'string' && c.value.trim().length > 0) {
       return { key: c.value.trim(), source: c.source };
@@ -28,7 +55,7 @@ export function buildNotionServer(): McpServer {
     );
     process.exit(1);
   }
-  console.error(`Using Notion API key from env: ${source}`);
+  console.error(`Using Notion API key from: ${source}`);
 
   const notion = new NotionClient({ auth: NOTION_API_KEY });
 
