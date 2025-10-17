@@ -161,3 +161,24 @@ MIT License — see LICENSE.
 - Verify the bundled entry runs:
   - Windows: `node "%USERPROFILE%\\.gemini\\extensions\\notion\\dist\\extension.cjs"`
   - macOS/Linux: `node "$HOME/.gemini/extensions/notion/dist/extension.cjs"`
+
+## Notion Integration (Required)
+
+- Create an internal integration:
+  - Open https://www.notion.so/profile/integrations
+  - Click “New integration”, choose your workspace, set Type to “Internal”, and save.
+  - In Capabilities, enable at least: Read content, Update content, Insert content.
+
+- Grant access to your pages/databases:
+  - In the integration page, open the “Access” tab and add the pages and/or databases you want the extension to use.
+  - Alternatively, in Notion, share specific pages/databases with your integration.
+
+- Copy the “Internal Integration Secret” and set it as your API key:
+  - Windows (User-scoped env, used by this server):
+    - `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')` then open a new terminal.
+  - macOS/Linux:
+    - `export NOTION_API_KEY=secret_...` (or add it to your shell profile)
+
+Notes:
+- On Windows this server reads the token only from the User-scoped environment (HKCU\\Environment).
+- On non-Windows the token is read from the process environment.
