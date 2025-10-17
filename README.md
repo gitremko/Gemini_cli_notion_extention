@@ -1,184 +1,85 @@
-# Gemini_cli_notion_extention
+# Notion MCP for Gemini CLI
 
-[![CI](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/gitremko/Gemini_cli_notion_extention/actions/workflows/ci.yml)
+A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and other MCP clients) search, read, and write Notion content.
 
+## Requirements
+- Gemini CLI installed and working
+- Node.js 20+ and npm
+- A Notion Internal Integration (API key)
 
-## Installation
+## Quick Install (recommended)
+- Install from GitHub:
+  - `gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention`
+- Create a Notion Internal Integration and grant access (see below)
+- Set your API key (see “Set API Key”)
+- Restart Gemini CLI, then run: `gemini extensions list` ? should show `notion`
 
-- Quick install (recommended)
-  - One-liner: gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention
-  - Prerequisites:
-    - Gemini CLI is installed and working
-    - Node.js 20+ and npm available
-    - Set NOTION_API_KEY in your environment (preferred). Also supported: GEMINI_NOTION_API_KEY, NOTION_TOKEN, NOTION_SECRET.
-  - After install: restart Gemini CLI and run gemini extensions list to confirm it shows 
-otion.
+## Create the Notion Integration (required)
+1) Go to https://www.notion.so/profile/integrations
+2) Click “New integration”
+   - Workspace: choose the workspace you’ll use
+   - Type: `Internal`
+   - Capabilities: enable at least “Read content”, “Update content”, “Insert content”
+   - Save
+3) Grant access to pages/databases
+   - On the integration page, open the “Access” tab and add the pages/databases you want to use
+   - Or share specific Notion pages/databases with your integration from Notion
+4) Copy the “Internal Integration Secret” — this is your API key
 
-- Local development (link)
-  - git clone https://github.com/gitremko/Gemini_cli_notion_extention && cd Gemini_cli_notion_extention
-  - Set NOTION_API_KEY in your env
-  - 
-pm install && npm run build
-  - gemini extensions link .
-  - Edit code and rebuild to pick up changes
-
-## Notion MCP Server
-
-Expose Notion pages and basic actions to MCP-capable clients (e.g., Gemini CLI if it supports MCP, Claude Code, VS Code Copilot MCP, Cursor).
-
-## Setup
-
-- Requirements
-  - Node.js 18+
-  - A Notion integration with an internal integration token
-  - Share the relevant pages/databases with your integration in Notion
-
-- Install
-  - Prefer setting your Notion key as an environment variable:
-    - Windows (PowerShell, user scope): `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
-    - Windows (CMD, user scope): `setx NOTION_API_KEY "secret_..."`
-    - macOS/Linux (current shell): `export NOTION_API_KEY=secret_...`
-    - macOS/Linux (persist): add `export NOTION_API_KEY=secret_...` to `~/.zshrc` or `~/.bashrc`
-    - Alternate names also supported: `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`
-  - Optional (local dev): you may still use a `.env` file by copying `.env.example` to `.env`.
-  - Run `npm install`.
-  - For development: `npm run dev` (runs via tsx on stdio)
-  - Build + run: `npm run build` then `npm start`.
-
-## Tools
-
-- `notion_search`
-  - Args: `query` (string, required), `filter` ({ property: 'object', value: 'page'|'database' } optional), `page_size` (1-100)
-  - Returns id, object type, title (if resolvable), url
-
-- `notion_get_page`
-  - Args: `page_id` (string)
-  - Returns the full Notion page object (properties/meta)
-
-- `notion_list_blocks`
-  - Args: `block_id` (string), `page_size` (optional)
-  - Returns child blocks for a page/block
-
-- `notion_append_paragraph`
-  - Args: `parent_block_id` (string), `text` (string)
-  - Appends a simple paragraph block under the page/block
-
-- `notion_create_page`
-  - Args: `database_id` (string), `title` (string), `title_property` (default "Name"), `properties` (object, optional)
-  - Creates a new page in a database
-
-## Running with MCP Clients
-
-- Stdio transport (generic MCP clients)
-  - Command: `notion-mcp` (after `npm i -g` or `npm run build && node dist/cli.js`)
-  - Env: `NOTION_API_KEY=...`
-  - Example client config (pseudo):
-    - name: `notion`
-    - type: `stdio`
-    - command: `notion-mcp`
-    - env: `{ "NOTION_API_KEY": "your_secret" }`
-
-- Streamable HTTP
-  - Command: `MCP_TRANSPORT=http PORT=3030 notion-mcp`
-  - Endpoint: `http://localhost:3030/mcp`
-  - Some clients (Claude Code, VS Code, Cursor) support HTTP MCP.
-
-## Gemini CLI Extension
-
-- Install globally so others can run the same command:
-  - `npm i -g` in this folder (or publish to npm and `npm i -g notion-mcp-server`)
-- Configure Gemini CLI to run the extension binary:
-  - command: `notion-mcp`
-  - transport: `stdio` (default) or use HTTP with `MCP_TRANSPORT=http` and `PORT`
-  - env: `{ "NOTION_API_KEY": "..." }`
-  - If Gemini CLI supports an extensions manifest, point an entry to the above command/env. Exact keys depend on Gemini CLI; see their extensions docs.
-
-## Gemini CLI Integration
-
-- If your Gemini CLI supports MCP servers via stdio, add a server entry pointing to this command and pass `NOTION_API_KEY` in env.
-- If it uses an `mcpServers` config (JSON), the entry typically looks like:
-  {
-    "mcpServers": {
-      "notion": {
-        "command": "node",
-        "args": ["dist/server.js"],
-        "env": { "NOTION_API_KEY": "..." },
-        "transport": "stdio"
-      }
-    }
-  }
-- Concrete paths and config keys can differ per client; consult your Gemini CLI docs for where to place this block.
-
-## Notes
-
-- Ensure your Notion integration has access to the pages/databases you want to use (share them in Notion).
-- Title property name can vary across databases; default is `Name`, override with `title_property` when needed.
-- For testing and inspection, you can also use the MCP Inspector: `npx @modelcontextprotocol/inspector` and connect to the running server (stdio or HTTP as configured).
-
-## User variables / secrets
-
-- Preferred: set `NOTION_API_KEY` as an environment variable so secrets do not live in files.
-- Also supported env var names: `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`.
-- Windows (user-scoped):
+## Set API Key
+- Windows (User-scoped, required on Windows)
   - PowerShell: `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
-  - CMD: `setx NOTION_API_KEY "secret_..."`
-  - Open a new terminal to pick up changes.
-- macOS/Linux:
+  - Open a new terminal after setting it
+- macOS/Linux
   - Current shell: `export NOTION_API_KEY=secret_...`
-  - Persist: add to `~/.zshrc` or `~/.bashrc`.
+  - Persist: add the export line to `~/.zshrc` or `~/.bashrc`
 
-## Getting Started
+Notes
+- Windows: this server reads the token only from the User-scoped environment (registry `HKCU\Environment`).
+- Non-Windows: the token is read from the process environment.
+- Supported names (first match wins): `NOTION_API_KEY`, `GEMINI_NOTION_API_KEY`, `NOTION_TOKEN`, `NOTION_SECRET`.
 
-- Easiest: gemini extensions install https://github.com/gitremko/Gemini_cli_notion_extention
-- Set NOTION_API_KEY in your environment
-- Restart Gemini CLI and run a Notion command
+## Verify the Install
+- Bundled server (no node_modules required):
+  - Windows: `node "%USERPROFILE%\.gemini\extensions\notion\dist\extension.cjs"`
+  - macOS/Linux: `node "$HOME/.gemini/extensions/notion/dist/extension.cjs"`
+- Expected log: `Using Notion API key from: ...` and the process waits for a client connection
 
-For local development, see the \"Local development (link)\" section above.
+## Use in Gemini CLI
+- After install, Gemini CLI discovers the MCP server `notion` automatically
+- Try a simple tool call (e.g., search):
+  - Ask Gemini to “search Notion for ‘<your term>’” — the tool used is `notion_search`
 
-## License
+## Local Development (link)
+- `git clone https://github.com/gitremko/Gemini_cli_notion_extention && cd Gemini_cli_notion_extention`
+- `npm install && npm run build`
+- `gemini extensions link .`
+- Edit code ? `npm run build` ? restart Gemini CLI
+- Unlink later: `gemini extensions unlink notion`
 
-MIT License — see LICENSE.
-
-
-## Uninstall / Unlink
-
-- Uninstall a GitHub-installed extension:
-  - `gemini extensions uninstall notion`
-- Remove a locally linked extension:
-  - `gemini extensions unlink notion`
-
-## Windows Note (secrets)
-
-- On Windows, this server reads the Notion token only from the User-scoped environment (registry HKCU\\Environment).
-- Set once via PowerShell:
-  - `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
-  - Open a new terminal for changes to take effect.
+## Available Tools (high-level)
+- `notion_search` — search pages/databases (query, optional filter, page_size)
+- `notion_get_page` — fetch a page object by id
+- `notion_list_blocks` — list child blocks for a page/block
+- `notion_append_paragraph` — append paragraph text
+- `notion_create_page` — create a page in a database (with title property)
+- Additional helpers: headings, to-dos, database listing, snippets
 
 ## Troubleshooting
-
-- Connection closed (-32000): ensure Node is available on PATH and reinstall the extension.
-- API token is invalid: verify the User-scoped env variable and that your Notion integration has access to the shared pages/databases.
-- Verify the bundled entry runs:
-  - Windows: `node "%USERPROFILE%\\.gemini\\extensions\\notion\\dist\\extension.cjs"`
+- Connection closed (-32000)
+  - Ensure Node is available on PATH
+  - Reinstall: `gemini extensions uninstall notion` ? `gemini extensions install <repo>`
+- API token is invalid
+  - Verify your key is correct and set in the right place
+  - Confirm your integration has access to the specific pages/databases
+- Verify the bundled entry runs
+  - Windows: `node "%USERPROFILE%\.gemini\extensions\notion\dist\extension.cjs"`
   - macOS/Linux: `node "$HOME/.gemini/extensions/notion/dist/extension.cjs"`
 
-## Notion Integration (Required)
+## Uninstall / Update
+- Uninstall GitHub-installed extension: `gemini extensions uninstall notion`
+- Update: uninstall, then install again from the GitHub URL
+- Remove local link: `gemini extensions unlink notion`
 
-- Create an internal integration:
-  - Open https://www.notion.so/profile/integrations
-  - Click “New integration”, choose your workspace, set Type to “Internal”, and save.
-  - In Capabilities, enable at least: Read content, Update content, Insert content.
-
-- Grant access to your pages/databases:
-  - In the integration page, open the “Access” tab and add the pages and/or databases you want the extension to use.
-  - Alternatively, in Notion, share specific pages/databases with your integration.
-
-- Copy the “Internal Integration Secret” and set it as your API key:
-  - Windows (User-scoped env, used by this server):
-    - `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')` then open a new terminal.
-  - macOS/Linux:
-    - `export NOTION_API_KEY=secret_...` (or add it to your shell profile)
-
-Notes:
-- On Windows this server reads the token only from the User-scoped environment (HKCU\\Environment).
-- On non-Windows the token is read from the process environment.
+## License
+MIT
