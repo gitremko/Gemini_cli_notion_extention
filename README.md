@@ -139,3 +139,25 @@ For local development, see the \"Local development (link)\" section above.
 
 MIT License — see LICENSE.
 
+
+## Uninstall / Unlink
+
+- Uninstall a GitHub-installed extension:
+  - `gemini extensions uninstall notion`
+- Remove a locally linked extension:
+  - `gemini extensions unlink notion`
+
+## Windows Note (secrets)
+
+- On Windows, this server reads the Notion token only from the User-scoped environment (registry HKCU\\Environment).
+- Set once via PowerShell:
+  - `[Environment]::SetEnvironmentVariable('NOTION_API_KEY','secret_...','User')`
+  - Open a new terminal for changes to take effect.
+
+## Troubleshooting
+
+- Connection closed (-32000): ensure Node is available on PATH and reinstall the extension.
+- API token is invalid: verify the User-scoped env variable and that your Notion integration has access to the shared pages/databases.
+- Verify the bundled entry runs:
+  - Windows: `node "%USERPROFILE%\\.gemini\\extensions\\notion\\dist\\extension.cjs"`
+  - macOS/Linux: `node "$HOME/.gemini/extensions/notion/dist/extension.cjs"`
