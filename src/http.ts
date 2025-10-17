@@ -1,4 +1,3 @@
-import 'dotenv/config';
 import express, { Request, Response } from 'express';
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js';
 import { buildNotionServer } from './shared/notionServer.js';

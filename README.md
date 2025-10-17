@@ -19,7 +19,7 @@ A lightweight Model Context Protocol (MCP) server that lets Gemini CLI (and othe
 2) Click “New integration”
    - Workspace: choose the workspace you’ll use
    - Type: `Internal`
-   - Capabilities: enable at least “Read content”, “Update content”, “Insert content”
+   - Capabilities: enable at minimum "Read content". To write, also enable "Insert content" and "Update content"
    - Save
 3) Grant access to pages/databases
    - On the integration page, open the “Access” tab and add the pages/databases you want to use
@@ -83,3 +83,4 @@ Notes
 
 ## License
 MIT
+
