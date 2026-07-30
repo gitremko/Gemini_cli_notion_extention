@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>HTML Pong</title>
+<style>
+  html, body {
+    height: 100%;
+    margin: 0;
+    background: #0b0b12;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Courier New', monospace;
+    color: #eee;
+  }
+  #wrap {
+    text-align: center;
+  }
+  h1 {
+    letter-spacing: 0.3em;
+    font-size: 1.2rem;
+    color: #7dd3fc;
+    margin: 0 0 12px;
+  }
+  canvas {
+    background: #05050a;
+    border: 2px solid #7dd3fc;
+    box-shadow: 0 0 24px rgba(125, 211, 252, 0.35);
+  }
+  #hint {
+    margin-top: 10px;
+    font-size: 0.85rem;
+    color: #888;
+  }
+</style>
+</head>
+<body>
+<div id="wrap">
+  <h1>PONG</h1>
+  <canvas id="game" width="800" height="500"></canvas>
+  <div id="hint">W / S — move &nbsp;|&nbsp; Arrow Up / Down also works &nbsp;|&nbsp; P — pause &nbsp;|&nbsp; First to 7 wins</div>
+</div>
+
+<script>
+(function () {
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.width, H = canvas.height;
+
+  const PADDLE_W = 12, PADDLE_H = 90, PADDLE_SPEED = 6;
+  const BALL_SIZE = 12;
+  const WIN_SCORE = 7;
+
+  const player = { x: 20, y: H / 2 - PADDLE_H / 2, w: PADDLE_W, h: PADDLE_H, dy: 0, score: 0 };
+  const cpu = { x: W - 20 - PADDLE_W, y: H / 2 - PADDLE_H / 2, w: PADDLE_W, h: PADDLE_H, score: 0 };
+
+  const ball = { x: W / 2, y: H / 2, size: BALL_SIZE, dx: 0, dy: 0, speed: 6 };
+
+  let paused = false;
+  let gameOver = false;
+
+  function resetBall(direction) {
+    ball.x = W / 2;
+    ball.y = H / 2;
+    ball.speed = 6;
+    const angle = (Math.random() * 0.6 - 0.3); // radians, slight up/down bias
+    ball.dx = Math.cos(angle) * ball.speed * direction;
+    ball.dy = Math.sin(angle) * ball.speed;
+  }
+
+  function resetMatch() {
+    player.score = 0;
+    cpu.score = 0;
+    gameOver = false;
+    resetBall(Math.random() < 0.5 ? 1 : -1);
+  }
+
+  resetBall(Math.random() < 0.5 ? 1 : -1);
+
+  const keys = {};
+  window.addEventListener('keydown', (e) => {
+    keys[e.key] = true;
+    if (e.key === 'p' || e.key === 'P') paused = !paused;
+    if (gameOver && (e.key === 'Enter' || e.key === ' ')) resetMatch();
+    if (['ArrowUp', 'ArrowDown', ' '].includes(e.key)) e.preventDefault();
+  });
+  window.addEventListener('keyup', (e) => { keys[e.key] = false; });
+
+  function movePlayer() {
+    if (keys['w'] || keys['W'] || keys['ArrowUp']) player.y -= PADDLE_SPEED;
+    if (keys['s'] || keys['S'] || keys['ArrowDown']) player.y += PADDLE_SPEED;
+    player.y = Math.max(0, Math.min(H - player.h, player.y));
+  }
+
+  function moveCpu() {
+    const center = cpu.y + cpu.h / 2;
+    const target = ball.y;
+    const diff = target - center;
+    const speed = Math.min(Math.abs(diff), PADDLE_SPEED * 0.85);
+    if (Math.abs(diff) > 6) {
+      cpu.y += Math.sign(diff) * speed;
+    }
+    cpu.y = Math.max(0, Math.min(H - cpu.h, cpu.y));
+  }
+
+  function rectsIntersect(bx, by, bs, px, py, pw, ph) {
+    return bx < px + pw && bx + bs > px && by < py + ph && by + bs > py;
+  }
+
+  function update() {
+    if (paused || gameOver) return;
+
+    movePlayer();
+    moveCpu();
+
+    ball.x += ball.dx;
+    ball.y += ball.dy;
+
+    if (ball.y <= 0) { ball.y = 0; ball.dy *= -1; }
+    if (ball.y + ball.size >= H) { ball.y = H - ball.size; ball.dy *= -1; }
+
+    if (ball.dx < 0 && rectsIntersect(ball.x, ball.y, ball.size, player.x, player.y, player.w, player.h)) {
+      ball.x = player.x + player.w;
+      const hitPos = (ball.y + ball.size / 2 - (player.y + player.h / 2)) / (player.h / 2);
+      ball.speed = Math.min(ball.speed + 0.4, 14);
+      ball.dx = Math.abs(ball.speed);
+      ball.dy = hitPos * ball.speed;
+    }
+
+    if (ball.dx > 0 && rectsIntersect(ball.x, ball.y, ball.size, cpu.x, cpu.y, cpu.w, cpu.h)) {
+      ball.x = cpu.x - ball.size;
+      const hitPos = (ball.y + ball.size / 2 - (cpu.y + cpu.h / 2)) / (cpu.h / 2);
+      ball.speed = Math.min(ball.speed + 0.4, 14);
+      ball.dx = -Math.abs(ball.speed);
+      ball.dy = hitPos * ball.speed;
+    }
+
+    if (ball.x < 0) {
+      cpu.score++;
+      if (cpu.score >= WIN_SCORE) gameOver = true; else resetBall(1);
+    } else if (ball.x > W) {
+      player.score++;
+      if (player.score >= WIN_SCORE) gameOver = true; else resetBall(-1);
+    }
+  }
+
+  function drawNet() {
+    ctx.strokeStyle = 'rgba(125, 211, 252, 0.4)';
+    ctx.setLineDash([8, 10]);
+    ctx.beginPath();
+    ctx.moveTo(W / 2, 0);
+    ctx.lineTo(W / 2, H);
+    ctx.stroke();
+    ctx.setLineDash([]);
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, W, H);
+    drawNet();
+
+    ctx.fillStyle = '#7dd3fc';
+    ctx.fillRect(player.x, player.y, player.w, player.h);
+    ctx.fillRect(cpu.x, cpu.y, cpu.w, cpu.h);
+
+    ctx.fillStyle = '#fef08a';
+    ctx.fillRect(ball.x, ball.y, ball.size, ball.size);
+
+    ctx.fillStyle = '#eee';
+    ctx.font = '48px "Courier New", monospace';
+    ctx.textAlign = 'center';
+    ctx.fillText(player.score, W / 2 - 60, 60);
+    ctx.fillText(cpu.score, W / 2 + 60, 60);
+
+    if (paused && !gameOver) {
+      ctx.font = '30px "Courier New", monospace';
+      ctx.fillText('PAUSED', W / 2, H / 2);
+    }
+
+    if (gameOver) {
+      ctx.font = '32px "Courier New", monospace';
+      const msg = player.score > cpu.score ? 'YOU WIN!' : 'CPU WINS!';
+      ctx.fillText(msg, W / 2, H / 2);
+      ctx.font = '18px "Courier New", monospace';
+      ctx.fillText('Press Enter to play again', W / 2, H / 2 + 34);
+    }
+  }
+
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+})();
+</script>
+</body>
+</html>
