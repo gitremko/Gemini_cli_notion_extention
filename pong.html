@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>HTML Pong</title>
 <style>
   html, body {
@@ -13,9 +14,14 @@
     justify-content: center;
     font-family: 'Courier New', monospace;
     color: #eee;
+    overscroll-behavior: none;
   }
   #wrap {
     text-align: center;
+    width: 100%;
+    max-width: 820px;
+    padding: 0 10px;
+    box-sizing: border-box;
   }
   h1 {
     letter-spacing: 0.3em;
@@ -27,19 +33,50 @@
     background: #05050a;
     border: 2px solid #7dd3fc;
     box-shadow: 0 0 24px rgba(125, 211, 252, 0.35);
+    width: 100%;
+    max-width: 800px;
+    height: auto;
+    touch-action: none;
+    display: block;
+    margin: 0 auto;
   }
   #hint {
     margin-top: 10px;
     font-size: 0.85rem;
     color: #888;
   }
+  #hint .touch-only { display: none; }
+  #hint .key-only { display: inline; }
+  body.touch #hint .touch-only { display: inline; }
+  body.touch #hint .key-only { display: none; }
+  #pauseBtn {
+    display: none;
+    margin-top: 14px;
+    font-family: inherit;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    color: #7dd3fc;
+    background: transparent;
+    border: 1px solid #7dd3fc;
+    border-radius: 4px;
+    padding: 10px 22px;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #pauseBtn:active {
+    background: rgba(125, 211, 252, 0.15);
+  }
+  body.touch #pauseBtn { display: inline-block; }
 </style>
 </head>
 <body>
 <div id="wrap">
   <h1>PONG</h1>
   <canvas id="game" width="800" height="500"></canvas>
-  <div id="hint">W / S — move &nbsp;|&nbsp; Arrow Up / Down also works &nbsp;|&nbsp; P — pause &nbsp;|&nbsp; First to 7 wins</div>
+  <div id="hint">
+    <span class="key-only">W / S — move &nbsp;|&nbsp; Arrow Up / Down also works &nbsp;|&nbsp; P — pause &nbsp;|&nbsp; First to 7 wins</span>
+    <span class="touch-only">Drag anywhere to move your paddle &nbsp;|&nbsp; First to 7 wins</span>
+  </div>
+  <button id="pauseBtn" type="button">PAUSE</button>
 </div>
 
 <script>
@@ -87,9 +124,51 @@
   });
   window.addEventListener('keyup', (e) => { keys[e.key] = false; });
 
+  // Touch: dragging anywhere on the canvas sets the paddle's target Y directly.
+  let touchTargetY = null;
+
+  function canvasYFromClientY(clientY) {
+    const rect = canvas.getBoundingClientRect();
+    const scale = H / rect.height;
+    return (clientY - rect.top) * scale;
+  }
+
+  function onTouchStart(e) {
+    document.body.classList.add('touch');
+    const touch = e.changedTouches[0];
+    touchTargetY = canvasYFromClientY(touch.clientY);
+    if (gameOver) resetMatch();
+    e.preventDefault();
+  }
+
+  function onTouchMove(e) {
+    const touch = e.changedTouches[0];
+    touchTargetY = canvasYFromClientY(touch.clientY);
+    e.preventDefault();
+  }
+
+  function onTouchEnd(e) {
+    touchTargetY = null;
+    e.preventDefault();
+  }
+
+  canvas.addEventListener('touchstart', onTouchStart, { passive: false });
+  canvas.addEventListener('touchmove', onTouchMove, { passive: false });
+  canvas.addEventListener('touchend', onTouchEnd, { passive: false });
+  canvas.addEventListener('touchcancel', onTouchEnd, { passive: false });
+
+  const pauseBtn = document.getElementById('pauseBtn');
+  pauseBtn.addEventListener('click', () => {
+    paused = !paused;
+    pauseBtn.textContent = paused ? 'RESUME' : 'PAUSE';
+  });
+
   function movePlayer() {
     if (keys['w'] || keys['W'] || keys['ArrowUp']) player.y -= PADDLE_SPEED;
     if (keys['s'] || keys['S'] || keys['ArrowDown']) player.y += PADDLE_SPEED;
+    if (touchTargetY !== null) {
+      player.y = touchTargetY - player.h / 2;
+    }
     player.y = Math.max(0, Math.min(H - player.h, player.y));
   }
 
